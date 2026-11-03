@@ -123,16 +123,16 @@ public class OutBoxImpl implements OutBox {
             throw new IllegalArgumentException("Metadata does not match the stored object");
         }
 
-        MerkleTree storedTree = merkleRangeTrees.get(storedMetadata.index());
+        MerkleTree existingTree = merkleRangeTrees.get(storedMetadata.index());
 
-        if (storedTree == null) {
+        if (existingTree == null) {
             Ristretto255.RistrettoPoint basePoint = Ristretto255.RistrettoPoint.base(lazySodiumJava);
             MerkleTree newTree = new MerkleTreeImpl(lazySodiumJava, basePoint);
             newTree.addMetadataPoint(storedMetadata.epochHour(), storedMetadata.point());
             merkleRangeTrees.put(storedMetadata.index(), newTree);
         }
         else {
-            storedTree.addMetadataPoint(storedMetadata.epochHour(), storedMetadata.point());
+            existingTree.addMetadataPoint(storedMetadata.epochHour(), storedMetadata.point());
         }
 
 
